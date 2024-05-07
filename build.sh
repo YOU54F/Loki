@@ -192,7 +192,7 @@ for target in "${targets[@]}"; do
 	wget --no-verbose "${url}" --output-document="${output}"
 	
 	# Apply patches requires for Apple Silicon
-	if [ "$(uname -sm)" == 'Darwin arm64' ]; then
+	if [ "$(uname -s)" == 'Darwin' ]; then
 		cd "${binutils_directory}"
 		# Only apply patch if required, as this loops for multiple targets
 		if patch --forward -p1 --dry-run < /tmp/binutils-apple-silicon.patch; then
