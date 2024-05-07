@@ -40,6 +40,7 @@ jobs:
           'arm64-apple-darwin',
           'x86_64-apple-darwin',
         ]
+      fail-fast: false
     steps:
     - uses: actions/checkout@main
       with:
@@ -52,6 +53,10 @@ jobs:
     #   run: |
     #     tar --directory='/tmp' --extract --file='./x86_64-linux-gnu.tar.xz'
     #     mv '/tmp/loki' '/tmp/loki-toolchain'
+    - name: Install MacOS toolchain
+      if: runner.os == 'macos'
+      run: |
+        brew install texinfo
     - name: Build Loki with OBGGCC
       run: |
         # source './tools/setup_toolchain.sh'
