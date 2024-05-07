@@ -69,7 +69,7 @@ jobs:
     - name: Build Loki with OBGGCC
       run: |
         export SDKROOT=$(xcrun --show-sdk-path)
-        rm -rf /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+        sudo rm -rf /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
         ./build.sh ${{ matrix.target }}
     - name: Generate tarball
       run: |
