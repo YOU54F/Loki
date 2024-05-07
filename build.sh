@@ -22,8 +22,11 @@ declare -r gcc_directory='/tmp/gcc-13.2.0'
 declare -r optflags='-Os'
 declare -r linkflags='-Wl,-s'
 
-declare -r max_jobs="$(($(nproc) * 12))"
-
+if [ "$(uname -s)" == 'Darwin' ]; then
+	declare -r max_jobs="$(($(sysctl -n hw.ncpu) * 8))"
+else
+	declare -r max_jobs="$(($(nproc) * 12))"
+fi
 declare build_type="${1}"
 
 if [ -z "${build_type}" ]; then
