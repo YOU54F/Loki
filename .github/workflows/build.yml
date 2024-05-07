@@ -33,12 +33,13 @@ jobs:
   cross-build:
     name: 'Cross build'
     # needs: native-build
-    runs-on: macos-latest
+    runs-on: macos-12
+    # runs-on: macos-latest
     strategy:
       matrix:
         target: [
-          'arm64-apple-darwin',
-          # 'x86_64-apple-darwin',
+          # 'arm64-apple-darwin',
+          'x86_64-apple-darwin',
         ]
       fail-fast: false
     steps:
