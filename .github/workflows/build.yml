@@ -68,6 +68,8 @@ jobs:
         xcode-version: '14.3.1' # macos-latest
         # xcode-version: '14.2.0' # macos-12
         # xcode-version: 'latest-stable' # macos-12
+    - name: check xcode root
+      run: xcrun --show-sdk-path
     - name: install rosetta 2
       if: matrix.target == 'x86_64-apple-darwin'
       run: |
