@@ -57,6 +57,12 @@ jobs:
       if: runner.os == 'macos'
       run: |
         brew install texinfo
+    - name: setup xcode
+      if: runner.os == 'macos'
+      run: |
+        xcode-select -p
+        sudo xcode-select --switch /Applications/Xcode.app
+        xcode-select -p
     - name: Build Loki with OBGGCC
       run: |
         # source './tools/setup_toolchain.sh'
