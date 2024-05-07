@@ -63,12 +63,19 @@ jobs:
     #     xcode-select -p
     #     sudo xcode-select --switch /Applications/Xcode.app
     #     xcode-select -p
+
+    - name: Rm cli
+      run: |
+        export SDKROOT=$(xcrun --show-sdk-path)
+        echo $SDKROOT
+        sudo rm -rf /Library/Developer/CommandLineTools
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: '14.3.1'
     - name: Build Loki with OBGGCC
       run: |
         export SDKROOT=$(xcrun --show-sdk-path)
+        echo $SDKROOT
         sudo rm -rf /Library/Developer/CommandLineTools
         ./build.sh ${{ matrix.target }}
     - name: Generate tarball
