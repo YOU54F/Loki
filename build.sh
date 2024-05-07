@@ -50,9 +50,12 @@ declare cross_compile_flags=''
 if ! (( is_native )); then
 	if [ "$(uname -s)" != 'Darwin' ]; then
 		source "./submodules/obggcc/toolchains/${build_type}.sh"
+	elif [ "$(uname -s)" == 'Darwin' ]; then
+		CROSS_COMPILE_TRIPLET=$build_type
 	fi
-	cross_compile_flags+="--host=${CROSS_COMPILE_TRIPLET} "
+	cross_compile_flags+="--host=${CROSS_COMPILE_TRIPLET} --build=${CROSS_COMPILE_TRIPLET} "
 fi
+echo "Cross compile flags: ${cross_compile_flags}"
 
 if ! [ -f "${gmp_tarball}" ]; then
 	wget --no-verbose 'https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz' --output-document="${gmp_tarball}"
