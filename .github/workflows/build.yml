@@ -6,79 +6,70 @@ on:
         - '**'
 
 jobs:
-  # native-build:
-  #   name: 'Native build'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@main
-  #     with:
-  #       submodules: true
-  #   - name: Build Loki
-  #     run: |
-  #       bash './build.sh' 'native'
-  #   - name: Generate tarball
-  #     run: |
-  #       declare tarball_filename='/tmp/x86_64-linux-gnu.tar.xz'
-  #       tar --directory='/tmp' --create --file=- 'loki' | xz --threads='0' --compress -9 > "${tarball_filename}"
-  #       sha256sum "${tarball_filename}" | sed 's|/tmp/||' > "${tarball_filename}.sha256"
-  #   - name: Upload artifact
-  #     uses: actions/upload-artifact@main
-  #     with:
-  #       name: native-toolchain
-  #       if-no-files-found: error
-  #       path: |
-  #         /tmp/x86_64-linux-gnu.tar.xz
-  #         /tmp/x86_64-linux-gnu.tar.xz.sha256
-  
-  cross-build:
-    name: 'Cross build'
-    # needs: native-build
-    runs-on: macos-12
-    # runs-on: macos-latest
-    strategy:
-      matrix:
-        target: [
-          # 'arm64-apple-darwin',
-          'x86_64-apple-darwin',
-        ]
-      fail-fast: false
+  native-build:
+    name: 'Native build'
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
       with:
         submodules: true
-    # - name: Download artifact
-    #   uses: actions/download-artifact@main
-    #   with:
-    #     name: native-toolchain
-    # - name: Setup toolchain
-    #   run: |
-    #     tar --directory='/tmp' --extract --file='./x86_64-linux-gnu.tar.xz'
-    #     mv '/tmp/loki' '/tmp/loki-toolchain'
-    - name: Install MacOS toolchain
-      if: runner.os == 'macos'
+    - name: Build Loki
       run: |
-        brew install texinfo
-    - name: Rm CommandLineTools
+        bash './build.sh' 'native'
+    - name: Generate tarball
       run: |
-        export SDKROOT=$(xcrun --show-sdk-path)
-        echo $SDKROOT
-        sudo rm -rf /Library/Developer/CommandLineTools
-    - uses: maxim-lobanov/setup-xcode@v1
+        declare tarball_filename='/tmp/x86_64-linux-gnu.tar.xz'
+        tar --directory='/tmp' --create --file=- 'loki' | xz --threads='0' --compress -9 > "${tarball_filename}"
+        sha256sum "${tarball_filename}" | sed 's|/tmp/||' > "${tarball_filename}.sha256"
+    - name: Upload artifact
+      uses: actions/upload-artifact@main
       with:
-        # xcode-version: '14.3.1' # macos-latest
-        xcode-version: '14.2.0' # macos-12
-        # xcode-version: 'latest-stable' # macos-12
-    - name: check xcode root
-      run: xcrun --show-sdk-path
-    # - name: install rosetta 2
-    #   if: matrix.target == 'x86_64-apple-darwin'
-    #   run: |
-    #     sudo softwareupdate --install-rosetta --agree-to-license
+        name: native-toolchain
+        if-no-files-found: error
+        path: |
+          /tmp/x86_64-linux-gnu.tar.xz
+          /tmp/x86_64-linux-gnu.tar.xz.sha256
+  
+  cross-build:
+    name: 'Cross build'
+    needs: native-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [
+          'alpha-unknown-linux-gnu',
+          'x86_64-unknown-linux-gnu',
+          'i386-unknown-linux-gnu',
+          'arm-unknown-linux-gnueabi',
+          'arm-unknown-linux-gnueabihf',
+          'hppa-unknown-linux-gnu',
+          'aarch64-unknown-linux-gnu',
+          'mips-unknown-linux-gnu',
+          'mipsel-unknown-linux-gnu',
+          'powerpc-unknown-linux-gnu',
+          's390-unknown-linux-gnu',
+          's390x-unknown-linux-gnu',
+          'sparc-unknown-linux-gnu',
+          'powerpc64le-unknown-linux-gnu'
+        ]
+    steps:
+    - uses: actions/checkout@main
+      with:
+        submodules: true
+    - name: Download artifact
+      uses: actions/download-artifact@main
+      with:
+        name: native-toolchain
+    - name: Setup toolchain
+      run: |
+        tar --directory='/tmp' --extract --file='./x86_64-linux-gnu.tar.xz'
+        mv '/tmp/loki' '/tmp/loki-toolchain'
     - name: Build Loki with OBGGCC
       run: |
-        export SDKROOT=$(xcrun --show-sdk-path)
-        echo $SDKROOT
-        ./build.sh ${{ matrix.target }}
+        source './tools/setup_toolchain.sh'
+        source './submodules/obggcc/tools/setup_toolchain.sh'
+        
+        bash './build.sh' '${{ matrix.target }}'
     - name: Generate tarball
       run: |
         declare tarball_filename='/tmp/${{ matrix.target }}.tar.xz'

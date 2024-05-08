@@ -158,6 +158,11 @@ declare -r targets=(
 )
 
 for target in "${targets[@]}"; do
+	# TODO: Fix target, check TODO.md for error
+	if [ "${target}" == 'riscv/riscv64' ] && [ "${build_type}" == 'x86_64-apple-darwin' ]; then
+		continue
+	fi
+
 	declare extra_configure_flags=''
 	
 	declare version='12.3-RELEASE'

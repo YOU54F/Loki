@@ -73,3 +73,25 @@ flag during linking and do at least one of the following:
 See any operating system documentation about shared libraries for
 more information, such as the ld(1) and ld.so(8) manual pages.
 ```
+
+
+## error riscv intel
+
+```console
+echo timestamp > s-check
+yes
+checking for dlfcn.h... ../../gcc/config/riscv/genrvv-type-indexer.cc:118:30: error: no member named 'log2' in namespace 'std'; did you mean simply 'log2'?
+    elmul_log2 = lmul_log2 - std::log2 (sew / eew);
+                             ^~~~~~~~~
+                             log2
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/math.h:1463:1: note: 'log2' declared here
+log2(_A1 __lcpp_x) _NOEXCEPT {return ::log2((double)__lcpp_x);}
+^
+../../gcc/config/riscv/genrvv-type-indexer.cc:120:30: error: no member named 'log2' in namespace 'std'; did you mean simply 'log2'?
+    elmul_log2 = lmul_log2 + std::log2 (eew / sew);
+                             ^~~~~~~~~
+                             log2
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/math.h:1463:1: note: 'log2' declared here
+log2(_A1 __lcpp_x) _NOEXCEPT {return ::log2((double)__lcpp_x);}
+^
+```
