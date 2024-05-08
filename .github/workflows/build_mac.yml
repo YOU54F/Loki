@@ -11,9 +11,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ 'macos-latest', macos-12 ]
+        os: [ 
+          macos-latest, 
+          # macos-12 
+          ]
         # target: [
-        #   'arm64-apple-darwin',
+        #   'aarch64-apple-darwin',
         #   'x86_64-apple-darwin',
         # ]
       fail-fast: false

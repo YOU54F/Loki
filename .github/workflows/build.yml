@@ -34,7 +34,9 @@ jobs:
     name: 'Cross build'
     needs: native-build
     runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: false
       matrix:
         target: [
           'alpha-unknown-linux-gnu',
@@ -52,6 +54,7 @@ jobs:
           'sparc-unknown-linux-gnu',
           'powerpc64le-unknown-linux-gnu'
         ]
+
     steps:
     - uses: actions/checkout@main
       with:

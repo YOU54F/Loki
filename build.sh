@@ -149,7 +149,7 @@ fi
 
 declare -r targets=(
 	'amd64'
-	'arm64'
+	# 'arm64'
 	# 'i386'
 	# 'powerpc/powerpc'
 	# 'powerpc/powerpc64'
