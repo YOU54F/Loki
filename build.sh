@@ -149,13 +149,13 @@ fi
 
 declare -r targets=(
 	'amd64'
-	# 'arm64'
-	# 'i386'
-	# 'powerpc/powerpc'
-	# 'powerpc/powerpc64'
-	# 'powerpc/powerpc64_elfv2'
-	# 'riscv/riscv64'
-	# 'sparc64/sparc64'
+	'arm64'
+	'i386'
+	'powerpc/powerpc'
+	'powerpc/powerpc64'
+	'powerpc/powerpc64_elfv2'
+	'riscv/riscv64'
+	'sparc64/sparc64'
 )
 
 for target in "${targets[@]}"; do
